@@ -11,17 +11,36 @@ namespace com.mycompany
     public class GotchiUI : MonoBehaviour
     {
         [SerializeField]
-        Gotchi gotchi;
+        GotchiV2 gotchi;
 
         [SerializeField]
         int currentGotchi;
 
         int facing = 0;
+        int handsPosition = 0;
+
+        public void SetCurrentGotchi(int currentGotchi)
+        {
+            this.currentGotchi = currentGotchi;
+        }
 
         private void Start()
         {
             loadGotchi();
-            InvokeRepeating("turn", 0.5f, 1f);
+            // InvokeRepeating("moveHands", 0.5f, 1f);
+            // InvokeRepeating("turn", 0.5f, 1f);
+        }
+
+        public void turn(int direction)
+        {
+            facing = direction;
+            switch(facing)
+            {
+                case 0: gotchi.SetFacing(AavegotchiData.Facing.FRONT); break;
+                case 1: gotchi.SetFacing(AavegotchiData.Facing.LEFT); break;
+                case 2: gotchi.SetFacing(AavegotchiData.Facing.BACK); break;
+                case 3: gotchi.SetFacing(AavegotchiData.Facing.RIGHT); break;
+            }   
         }
 
         void turn()
@@ -36,6 +55,16 @@ namespace com.mycompany
             }   
         }
 
+        // // add some code to raise and lower hands of the gotchi based on it's current facing
+        void moveHands()
+        {
+            handsPosition = (handsPosition + 1) % 2;
+            switch(handsPosition)
+            {
+                case 0: gotchi.SetHandPose(AavegotchiData.HandPose.DOWN_OPEN); break;
+                case 1: gotchi.SetHandPose(AavegotchiData.HandPose.UP); break;
+            }   
+        }
 
         CancellationTokenSource cts;
 
